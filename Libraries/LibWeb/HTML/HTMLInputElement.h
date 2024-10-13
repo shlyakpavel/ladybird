@@ -13,6 +13,7 @@
 #include <LibWeb/DOM/Text.h>
 #include <LibWeb/FileAPI/FileList.h>
 #include <LibWeb/HTML/ColorPickerUpdateState.h>
+#include <LibWeb/HTML/ConstraintValidation.h>
 #include <LibWeb/HTML/FileFilter.h>
 #include <LibWeb/HTML/FormAssociatedElement.h>
 #include <LibWeb/HTML/HTMLElement.h>
@@ -50,6 +51,8 @@ namespace Web::HTML {
 class HTMLInputElement final
     : public HTMLElement
     , public FormAssociatedTextControlElement
+    , public ConstraintValidation
+    , public DOM::EditableTextNodeOwner
     , public Layout::ImageProvider {
     WEB_PLATFORM_OBJECT(HTMLInputElement, HTMLElement);
     GC_DECLARE_ALLOCATOR(HTMLInputElement);
@@ -147,9 +150,11 @@ public:
     WebIDL::ExceptionOr<void> step_up(WebIDL::Long n = 1);
     WebIDL::ExceptionOr<void> step_down(WebIDL::Long n = 1);
 
-    WebIDL::ExceptionOr<bool> check_validity();
-    WebIDL::ExceptionOr<bool> report_validity();
-    void set_custom_validity(String const&);
+    // ^ConstraintValidation
+    CONSTRAINT_VALIDATION_IMPL();
+
+    virtual bool is_barred_from_constraint_validation() const override;
+    virtual bool is_value_missing() const override;
 
     WebIDL::ExceptionOr<void> show_picker();
 
