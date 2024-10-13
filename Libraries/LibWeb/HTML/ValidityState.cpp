@@ -12,8 +12,9 @@ namespace Web::HTML {
 
 GC_DEFINE_ALLOCATOR(ValidityState);
 
-ValidityState::ValidityState(JS::Realm& realm)
+ValidityState::ValidityState(JS::Realm& realm, ConstraintValidation const& associated_element)
     : PlatformObject(realm)
+    , m_associated_element(associated_element)
 {
 }
 
