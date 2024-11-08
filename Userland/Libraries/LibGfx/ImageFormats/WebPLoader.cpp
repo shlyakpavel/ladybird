@@ -15,23 +15,6 @@
 
 namespace Gfx {
 
-static ErrorOr<NonnullRefPtr<Bitmap>> rotate_bitmap(NonnullRefPtr<Bitmap> bitmap, Gfx::TIFF::Orientation orientation)
-{
-    if (orientation == Gfx::TIFF::Orientation::Default)
-        return bitmap;
-
-    auto oriented_bmp = TRY(ExifOrientedBitmap::create(orientation, bitmap->size(), bitmap->format()));
-
-    for (int y = 0; y < bitmap->size().height(); ++y) {
-        for (int x = 0; x < bitmap->size().width(); ++x) {
-            auto pixel = bitmap->get_pixel(x, y);
-            oriented_bmp.set_pixel(x, y, pixel.value());
-        }
-    }
-
-    return oriented_bmp.bitmap();
-}
-
 struct WebPLoadingContext {
     enum State {
         NotDecoded = 0,
@@ -179,8 +162,6 @@ static ErrorOr<void> decode_webp_image(WebPLoadingContext& context)
         auto image_data = WebPDecodeBGRAInto(context.data.data(), context.data.size(), bitmap->scanline_u8(0), bitmap->data_size(), bitmap->pitch());
         if (image_data == nullptr)
             return Error::from_string_literal("Failed to decode webp image into bitmap");
-
-        bitmap = TRY(rotate_bitmap(bitmap, context.orientation));
 
         auto duration = 0;
         context.frame_descriptors.append(ImageFrameDescriptor { bitmap, duration });
