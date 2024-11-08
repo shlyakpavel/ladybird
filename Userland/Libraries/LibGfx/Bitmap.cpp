@@ -85,8 +85,9 @@ ErrorOr<NonnullRefPtr<Bitmap>> Bitmap::create_shareable(BitmapFormat format, Alp
     return bitmap;
 }
 
-Bitmap::Bitmap(BitmapFormat format, AlphaType alpha_type, IntSize size, BackingStore const& backing_store)
+Bitmap::Bitmap(BitmapFormat format, AlphaType alpha_type, IntSize size, Bitmap::Orientation orientation = Bitmap::Orientation::Default, BackingStore const& backing_store)
     : m_size(size)
+    , m_orientation(orientation)
     , m_data(backing_store.data)
     , m_pitch(backing_store.pitch)
     , m_format(format)
@@ -101,11 +102,11 @@ Bitmap::Bitmap(BitmapFormat format, AlphaType alpha_type, IntSize size, BackingS
     };
 }
 
-ErrorOr<NonnullRefPtr<Bitmap>> Bitmap::create_wrapper(BitmapFormat format, AlphaType alpha_type, IntSize size, size_t pitch, void* data, Function<void()>&& destruction_callback)
+ErrorOr<NonnullRefPtr<Bitmap>> Bitmap::create_wrapper(BitmapFormat format, AlphaType alpha_type, IntSize size, Bitmap::Orientation orientation, size_t pitch, void* data, Function<void()>&& destruction_callback)
 {
     if (size_would_overflow(format, size))
         return Error::from_string_literal("Gfx::Bitmap::create_wrapper size overflow");
-    return adopt_ref(*new Bitmap(format, alpha_type, size, pitch, data, move(destruction_callback)));
+    return adopt_ref(*new Bitmap(format, alpha_type, size, orientation, pitch, data, move(destruction_callback)));
 }
 
 ErrorOr<NonnullRefPtr<Bitmap>> Bitmap::load_from_file(StringView path, Optional<IntSize> ideal_size)
@@ -300,6 +301,7 @@ ErrorOr<void> encode(Encoder& encoder, AK::NonnullRefPtr<Gfx::Bitmap> const& bit
     TRY(encoder.encode(bitmap->size_in_bytes()));
     TRY(encoder.encode(bitmap->pitch()));
     TRY(encoder.encode(bitmap->size()));
+    TRY(encoder.encode(bitmap->orientation()));
     return {};
 }
 
@@ -321,8 +323,9 @@ ErrorOr<AK::NonnullRefPtr<Gfx::Bitmap>> decode(Decoder& decoder)
     auto size_in_bytes = TRY(decoder.decode<size_t>());
     auto pitch = TRY(decoder.decode<size_t>());
     auto size = TRY(decoder.decode<Gfx::IntSize>());
+    auto orientation = TRY(decoder.decode<Bitmap::Orientation>());
     auto* data = TRY(Core::System::mmap(nullptr, round_up_to_power_of_two(size_in_bytes, PAGE_SIZE), PROT_READ | PROT_WRITE, MAP_SHARED, anon_file.fd(), 0));
-    return Gfx::Bitmap::create_wrapper(bitmap_format, alpha_type, size, pitch, data, [data, size_in_bytes] {
+    return Gfx::Bitmap::create_wrapper(bitmap_format, alpha_type, size, orientation, pitch, data, [data, size_in_bytes] {
         MUST(Core::System::munmap(data, size_in_bytes));
     });
 }

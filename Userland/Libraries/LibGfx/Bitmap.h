@@ -88,6 +88,17 @@ public:
         Luminance
     };
 
+    enum class Orientation {
+        Default = 1,
+        FlipHorizontally = 2,
+        Rotate180 = 3,
+        FlipVertically = 4,
+        Rotate90ClockwiseThenFlipHorizontally = 5,
+        Rotate90Clockwise = 6,
+        FlipHorizontallyThenRotate90Clockwise = 7,
+        Rotate90CounterClockwise = 8,
+    };
+
     void apply_mask(Gfx::Bitmap const& mask, MaskKind);
 
     ~Bitmap();
@@ -114,6 +125,8 @@ public:
     [[nodiscard]] int height() const { return m_size.height(); }
 
     [[nodiscard]] size_t pitch() const { return m_pitch; }
+
+    [[nodiscard]] Bitmap::Orientation orientation () const { return m_orientation; }
 
     [[nodiscard]] static unsigned bpp_for_format(BitmapFormat format)
     {
@@ -180,6 +193,7 @@ private:
     IntSize m_size;
     void* m_data { nullptr };
     size_t m_pitch { 0 };
+    Bitmap::Orientation m_orientation { Bitmap::Orientation::Default };
     BitmapFormat m_format { BitmapFormat::Invalid };
     AlphaType m_alpha_type { AlphaType::Premultiplied };
     Core::AnonymousBuffer m_buffer;
