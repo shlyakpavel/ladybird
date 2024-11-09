@@ -60,7 +60,7 @@ Color ImmutableBitmap::get_pixel(int x, int y) const
     return m_impl->source.get<NonnullRefPtr<Gfx::Bitmap>>()->get_pixel(x, y);
 }
 
-static SkColorType to_skia_color_type(Gfx::BitmapFormat format)
+SkColorType to_skia_color_type(Gfx::BitmapFormat format)
 {
     switch (format) {
     case Gfx::BitmapFormat::Invalid:

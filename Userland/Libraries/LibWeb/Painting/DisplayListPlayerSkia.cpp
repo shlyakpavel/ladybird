@@ -26,6 +26,7 @@
 
 #include <LibGfx/Font/ScaledFont.h>
 #include <LibGfx/PathSkia.h>
+#include <LibGfx/ImmutableBitmap.h>
 #include <LibWeb/CSS/ComputedValues.h>
 #include <LibWeb/Painting/DisplayListPlayerSkia.h>
 #include <LibWeb/Painting/ShadowPainting.h>
@@ -237,23 +238,6 @@ static SkRRect to_skia_rrect(auto const& rect, CornerRadii const& corner_radii)
     radii[3].set(corner_radii.bottom_left.horizontal_radius, corner_radii.bottom_left.vertical_radius);
     rrect.setRectRadii(to_skia_rect(rect), radii);
     return rrect;
-}
-
-static SkColorType to_skia_color_type(Gfx::BitmapFormat format)
-{
-    switch (format) {
-    case Gfx::BitmapFormat::Invalid:
-        return kUnknown_SkColorType;
-    case Gfx::BitmapFormat::BGRA8888:
-    case Gfx::BitmapFormat::BGRx8888:
-        return kBGRA_8888_SkColorType;
-    case Gfx::BitmapFormat::RGBA8888:
-        return kRGBA_8888_SkColorType;
-    case Gfx::BitmapFormat::RGBx8888:
-        return kRGB_888x_SkColorType;
-    default:
-        return kUnknown_SkColorType;
-    }
 }
 
 static SkBitmap to_skia_bitmap(Gfx::Bitmap const& bitmap)

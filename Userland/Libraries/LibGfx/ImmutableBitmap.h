@@ -12,12 +12,15 @@
 #include <LibGfx/Bitmap.h>
 #include <LibGfx/Forward.h>
 #include <LibGfx/Rect.h>
+#include <core/SkColorType.h>
 
 class SkImage;
 
 namespace Gfx {
 
 struct ImmutableBitmapImpl;
+
+SkColorType to_skia_color_type(Gfx::BitmapFormat format);
 
 class ImmutableBitmap final : public RefCounted<ImmutableBitmap> {
 public:

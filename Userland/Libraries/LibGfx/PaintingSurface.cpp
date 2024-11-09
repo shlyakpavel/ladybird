@@ -29,21 +29,6 @@ struct PaintingSurface::Impl {
     RefPtr<SkiaBackendContext> context;
 };
 
-static SkColorType to_skia_color_type(Gfx::BitmapFormat format)
-{
-    switch (format) {
-    case Gfx::BitmapFormat::Invalid:
-        return kUnknown_SkColorType;
-    case Gfx::BitmapFormat::BGRA8888:
-    case Gfx::BitmapFormat::BGRx8888:
-        return kBGRA_8888_SkColorType;
-    case Gfx::BitmapFormat::RGBA8888:
-        return kRGBA_8888_SkColorType;
-    default:
-        return kUnknown_SkColorType;
-    }
-}
-
 NonnullRefPtr<PaintingSurface> PaintingSurface::create_with_size(RefPtr<SkiaBackendContext> context, Gfx::IntSize size, Gfx::BitmapFormat color_type, Gfx::AlphaType alpha_type)
 {
     auto sk_color_type = to_skia_color_type(color_type);
