@@ -724,6 +724,7 @@ set(SOURCES
     SVG/SVGTransformList.cpp
     SVG/SVGTSpanElement.cpp
     SVG/SVGUseElement.cpp
+    SVG/SVGFEGaussianBlurElement.cpp
     SVG/TagNames.cpp
     SVG/ViewBox.cpp
     Selection/Selection.cpp

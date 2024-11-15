@@ -1,0 +1,8 @@
+// https://drafts.fxtf.org/filter-effects/#svgfilterprimitivestandardattributes
+interface mixin SVGFilterPrimitiveStandardAttributes {
+	readonly attribute SVGAnimatedLength x;
+	readonly attribute SVGAnimatedLength y;
+	readonly attribute SVGAnimatedLength width;
+	readonly attribute SVGAnimatedLength height;
+	readonly attribute SVGAnimatedString result;
+  };

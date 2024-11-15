@@ -757,6 +757,7 @@ class SVGRectElement;
 class SVGScriptElement;
 class SVGSVGElement;
 class SVGTitleElement;
+class SVGFEGaussianBlurElement;
 }
 
 namespace Web::UIEvents {
