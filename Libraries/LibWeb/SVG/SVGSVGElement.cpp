@@ -266,4 +266,15 @@ GC::Ref<SVGTransform> SVGSVGElement::create_svg_transform() const
     return SVGTransform::create(realm());
 }
 
+GC::Ref<SVGTransform> SVGSVGElement::create_svg_transform_from_matrix(Optional<Geometry::DOMMatrix2DInit> matrix) const
+{
+    auto dom_matrix = Geometry::DOMMatrix::from_matrix(vm(), matrix.value_or({}));
+
+    auto svg_transform = SVGTransform::create(realm());
+    svg_transform.set_matrix(matrix);
+
+    return svg_transform;
+}
+
+
 }
