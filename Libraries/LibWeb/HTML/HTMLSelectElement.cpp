@@ -648,6 +648,11 @@ void HTMLSelectElement::update_selectedness()
     update_inner_text_element();
 }
 
+bool HTMLSelectElement::is_focusable() const
+{
+    return enabled();
+}
+
 // https://html.spec.whatwg.org/multipage/form-elements.html#the-select-element:suffering-from-being-missing
 bool HTMLSelectElement::is_value_missing() const
 {

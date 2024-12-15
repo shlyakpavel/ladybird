@@ -6,13 +6,12 @@
 
 #pragma once
 
-#include <LibJS/Heap/GCPtr.h>
 #include <LibWeb/WebIDL/ExceptionOr.h>
 
 namespace Web::HTML {
 
 #define CONSTRAINT_VALIDATION_IMPL()                                                                           \
-    JS::NonnullGCPtr<ValidityState const> validity() const { return ConstraintValidation::validity(*this); }   \
+    GC::Ref<ValidityState const> validity() const { return ConstraintValidation::validity(*this); }   \
     bool will_validate() const { return ConstraintValidation::will_validate(*this); }                          \
     void set_custom_validity(String const& error) { ConstraintValidation::set_custom_validity(error, *this); } \
     WebIDL::ExceptionOr<bool> check_validity() { return ConstraintValidation::check_validity(*this); }         \
@@ -24,7 +23,7 @@ class ConstraintValidation {
 public:
     virtual ~ConstraintValidation() = default;
 
-    JS::NonnullGCPtr<ValidityState const> validity(DOM::Element const&) const;
+    GC::Ref<ValidityState const> validity(DOM::Element const&) const;
     bool will_validate(DOM::Element const&) const;
     void set_custom_validity(String const&, DOM::Element const&);
     WebIDL::ExceptionOr<bool> check_validity(DOM::Element const&);
@@ -65,7 +64,7 @@ protected:
 
     String custom_validity_error_message() const { return m_custom_validity_error_message; }
 
-    mutable JS::GCPtr<ValidityState const> m_validity;
+    mutable GC::Ptr<ValidityState const> m_validity;
 
 private:
     String m_custom_validity_error_message;

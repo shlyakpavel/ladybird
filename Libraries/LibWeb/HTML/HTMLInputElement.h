@@ -52,7 +52,6 @@ class HTMLInputElement final
     : public HTMLElement
     , public FormAssociatedTextControlElement
     , public ConstraintValidation
-    , public DOM::EditableTextNodeOwner
     , public Layout::ImageProvider {
     WEB_PLATFORM_OBJECT(HTMLInputElement, HTMLElement);
     GC_DECLARE_ALLOCATOR(HTMLInputElement);
@@ -193,8 +192,6 @@ public:
     virtual void form_associated_element_attribute_changed(FlyString const&, Optional<String> const&, Optional<FlyString> const&) override;
 
     virtual WebIDL::ExceptionOr<void> cloned(Node&, bool) override;
-
-    GC::Ref<ValidityState const> validity() const;
 
     // ^HTMLElement
     // https://html.spec.whatwg.org/multipage/forms.html#category-label

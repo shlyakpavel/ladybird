@@ -13,12 +13,11 @@
 namespace Web::HTML {
 
 // https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#dom-cva-validity
-JS::NonnullGCPtr<ValidityState const> ConstraintValidation::validity(DOM::Element const& element) const
+GC::Ref<ValidityState const> ConstraintValidation::validity(DOM::Element const& element) const
 {
     if (!m_validity) {
-        auto& vm = element.vm();
         auto& realm = element.realm();
-        m_validity = vm.heap().allocate<ValidityState>(realm, realm, *this);
+        m_validity = realm.create<ValidityState>(realm, *this);
     }
 
     return *m_validity;
